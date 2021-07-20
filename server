@@ -28,10 +28,25 @@ CAM_PASSWD = ""
 CAM_NC = "00000002"
 CAM_CNONCE = "e16226f667ebc0c4"
 
+def digestHeader2Dict(header = ""):
+    headerDict = {}
+    if header.find("Digest") >= 0:
+        split = header.replace("Digest", "").split(",")
+        for s in split:
+            split2 = s.strip(" ").split("=")
+            headerDict[split2[0]] = split2[1].strip("\"")
+    return headerDict
+
 # Logs into the camera
 def cam_login():
     r = requests.get("http://" + CAM_IP + "/index.htm")
     print(r.status_code)
+
+    # Check for authentication
+    if r.status_code == 401:
+        wwwHeader = r.headers['WWW-Authenticate']
+        wwwDict = digestHeader2Dict(wwwHeader)
+        print(wwwDict)
     pass
 
 cam_login()
