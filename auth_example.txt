@@ -1,0 +1,19 @@
+WWW-Authenticate: Digest realm="DCS-5222LB1", nonce="7576831e705c8679182cf38569507df6", algorithm=MD5, qop="auth"
+
+Authorization: Digest username="admin", realm="DCS-5222LB1", nonce="7576831e705c8679182cf38569507df6", uri="/index.htm", algorithm=MD5, response="04f38c5f5bd4f3d0a3c1522db1aa14d7", qop=auth, nc=00000002, cnonce="e16226f667ebc0c4"
+
+==========
+
+https://en.wikipedia.org/wiki/Digest_access_authentication
+
+==========
+
+# Input-HA1: admin:DCS-5222LB1:
+# Input-HA2: GET:/index.htm
+
+HA1 = 94f5c2d50511c76852568fbf7cfe6cd8
+HA2 = 511e2d61ef900f0dd4c33b80e6cf6a35
+
+# Input-RSP: 94f5c2d50511c76852568fbf7cfe6cd8:7576831e705c8679182cf38569507df6:00000002:e16226f667ebc0c4:auth:511e2d61ef900f0dd4c33b80e6cf6a35
+
+RSP = 04f38c5f5bd4f3d0a3c1522db1aa14d7
