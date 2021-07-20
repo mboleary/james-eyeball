@@ -6,7 +6,7 @@ import sys
 import socket
 
 KEY="KM0ZRVIljWKiBLy293Al4Qm1VqbLF2at4gxLfoqtT7o="
-HOST = "172.31.1.234"
+HOST = "0.0.0.0"
 PORT = 65123
 
 f = cryptography.fernet.Fernet(KEY)

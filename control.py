@@ -8,7 +8,7 @@ import json
 kit = ServoKit(channels=16)
 
 KEY="KM0ZRVIljWKiBLy293Al4Qm1VqbLF2at4gxLfoqtT7o="
-HOST = "172.31.1.234"
+HOST = "0.0.0.0"
 PORT = 65123
 PANSERVO = 1
 TILTSERVO = 0

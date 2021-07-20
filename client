@@ -31,7 +31,7 @@ S_VAL = 5
 L_VAL = 20
 KEY = "KM0ZRVIljWKiBLy293Al4Qm1VqbLF2at4gxLfoqtT7o="
 # HOST = "riverhill.cxd.guru"
-HOST = "192.168.8.197"
+HOST = "0.0.0.0"
 PORT = 65123
 
 f = cryptography.fernet.Fernet(KEY)
