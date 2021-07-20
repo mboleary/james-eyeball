@@ -27,12 +27,18 @@ import sys
 import socket
 import termios
 
+# small and large movement increments, can be changed here by user
+
 S_VAL = 5
 L_VAL = 20
-KEY = "KM0ZRVIljWKiBLy293Al4Qm1VqbLF2at4gxLfoqtT7o="
-# HOST = "riverhill.cxd.guru"
-HOST = "172.31.1.31"
-PORT = 65123
+
+if len(sys.argv) != 4:
+    print("Usage: {} <HOST> <PORT> <KEY>".format(sys.argv[0]))
+    exit(1)
+
+HOST = sys.argv[1]
+PORT = int(sys.argv[2])
+KEY = sys.argv[3]
 
 f = cryptography.fernet.Fernet(KEY)
 
@@ -80,6 +86,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             msg = "status"
 
         elif char == "q":
+            print()
             break
         elif char in "0123456789":
             nums = nums + char
