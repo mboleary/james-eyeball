@@ -27,6 +27,7 @@ CAM_USERNAME = "admin"
 CAM_PASSWD = ""
 CAM_NC = "00000002"
 CAM_CNONCE = "e16226f667ebc0c4"
+# CAM_CNONCE = "e16226f667ebc0c6"
 CAM_REALM = "DCS-5222LB1"
 
 global CAM_AUTH_RESP
@@ -48,7 +49,7 @@ def digestGetAuthHeader(nonce):
     ha2 = hashlib.md5(f'GET:{uri}'.encode('utf-8'))
     rsp = hashlib.md5(f'{ha1.hexdigest()}:{nonce}:{CAM_NC}:{CAM_CNONCE}:{qop}:{ha2.hexdigest()}'.encode('utf-8'))
     
-    return f' Digest username="{CAM_USERNAME}", realm="{CAM_REALM}", nonce="{nonce}", uri="{uri}", algorithm=MD5, response="{rsp.hexdigest()}", qop={qop}, nc={CAM_NC}, cnonce="{CAM_CNONCE}"'
+    return f'Digest username="{CAM_USERNAME}", realm="{CAM_REALM}", nonce="{nonce}", uri="{uri}", algorithm=MD5, response="{rsp.hexdigest()}", qop={qop}, nc={CAM_NC}, cnonce="{CAM_CNONCE}"'
 
 # Logs into the camera
 def cam_login():
@@ -59,8 +60,13 @@ def cam_login():
     if r.status_code == 401:
         wwwHeader = r.headers['WWW-Authenticate']
         wwwDict = digestHeader2Dict(wwwHeader)
-        authHeaderContent = digestGetAuthHeader(wwwDict['nonce'])
-        print(authHeaderContent)
+        newHeaders = {
+            'Authorization': digestGetAuthHeader(wwwDict['nonce'])
+            # 'Authorization': digestGetAuthHeader('7576831e705c8679182cf38569507df6')
+        }
+        print(newHeaders)
+        nr = requests.get("http://" + CAM_IP + "/index.htm", newHeaders)
+        print(nr.status_code, nr.content)
     pass
 
 cam_login()
