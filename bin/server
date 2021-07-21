@@ -10,22 +10,29 @@ import hashlib
 import requests
 from requests.auth import HTTPDigestAuth
 
-if len(sys.argv) != 4:
-    print("Usage: {} <HOST> <PORT> <KEY>".format(sys.argv[0]))
+if len(sys.argv) < 6:
+    print("Usage: {} <HOST> <PORT> <KEY> <CAMERA_IP> <CAMERA_USER> <CAMERA_PASSWORD>".format(sys.argv[0]))
     exit(1)
 
 HOST = sys.argv[1]
 PORT = int(sys.argv[2])
 KEY = sys.argv[3]
+CAM_IP = sys.argv[4]
+CAM_USERNAME = sys.argv[5]
+
+if len(sys.argv) == 6:
+    CAM_PASSWD = ""
+else:
+    CAM_PASSWD = sys.argv[6]
 
 f = cryptography.fernet.Fernet(KEY)
 
 global lasterror
 lasterror = ""
 
-CAM_IP = "172.31.1.155"
-CAM_USERNAME = "admin"
-CAM_PASSWD = ""
+# CAM_IP = "172.31.1.155"
+# CAM_USERNAME = "admin"
+# CAM_PASSWD = ""
 # CAM_NC = "00000002"
 # CAM_CNONCE = "e16226f667ebc0c4"
 # CAM_CNONCE = "e16226f667ebc0c6"
