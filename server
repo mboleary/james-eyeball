@@ -8,6 +8,7 @@ import json
 import sys
 import hashlib
 import requests
+from requests.auth import HTTPDigestAuth
 
 if len(sys.argv) != 4:
     print("Usage: {} <HOST> <PORT> <KEY>".format(sys.argv[0]))
@@ -25,51 +26,41 @@ lasterror = ""
 CAM_IP = "172.31.1.155"
 CAM_USERNAME = "admin"
 CAM_PASSWD = ""
-CAM_NC = "00000002"
-CAM_CNONCE = "e16226f667ebc0c4"
+# CAM_NC = "00000002"
+# CAM_CNONCE = "e16226f667ebc0c4"
 # CAM_CNONCE = "e16226f667ebc0c6"
-CAM_REALM = "DCS-5222LB1"
+# CAM_REALM = "DCS-5222LB1"
 
-global CAM_AUTH_RESP
-CAM_AUTH_RESP = ""
+# global CAM_AUTH_RESP
+# CAM_AUTH_RESP = ""
 
-def digestHeader2Dict(header = ""):
-    headerDict = {}
-    if header.find("Digest") >= 0:
-        split = header.replace("Digest", "").split(",")
-        for s in split:
-            split2 = s.strip(" ").split("=")
-            headerDict[split2[0]] = split2[1].strip("\"")
-    return headerDict
+# def digestHeader2Dict(header = ""):
+#     headerDict = {}
+#     if header.find("Digest") >= 0:
+#         split = header.replace("Digest", "").split(",")
+#         for s in split:
+#             split2 = s.strip(" ").split("=")
+#             headerDict[split2[0]] = split2[1].strip("\"")
+#     return headerDict
 
-def digestGetAuthHeader(nonce):
-    uri = "/index.htm"
-    qop = "auth"
-    ha1 = hashlib.md5(f'{CAM_USERNAME}:{CAM_REALM}:'.encode('utf-8'))
-    ha2 = hashlib.md5(f'GET:{uri}'.encode('utf-8'))
-    rsp = hashlib.md5(f'{ha1.hexdigest()}:{nonce}:{CAM_NC}:{CAM_CNONCE}:{qop}:{ha2.hexdigest()}'.encode('utf-8'))
+# def digestGetAuthHeader(nonce):
+#     uri = "/index.htm"
+#     qop = "auth"
+#     ha1 = hashlib.md5(f'{CAM_USERNAME}:{CAM_REALM}:'.encode('utf-8'))
+#     ha2 = hashlib.md5(f'GET:{uri}'.encode('utf-8'))
+#     rsp = hashlib.md5(f'{ha1.hexdigest()}:{nonce}:{CAM_NC}:{CAM_CNONCE}:{qop}:{ha2.hexdigest()}'.encode('utf-8'))
     
-    return f'Digest username="{CAM_USERNAME}", realm="{CAM_REALM}", nonce="{nonce}", uri="{uri}", algorithm=MD5, response="{rsp.hexdigest()}", qop={qop}, nc={CAM_NC}, cnonce="{CAM_CNONCE}"'
+#     return f'Digest username="{CAM_USERNAME}", realm="{CAM_REALM}", nonce="{nonce}", uri="{uri}", algorithm=MD5, response="{rsp.hexdigest()}", qop={qop}, nc={CAM_NC}, cnonce="{CAM_CNONCE}"'
 
 # Logs into the camera
-def cam_login():
-    r = requests.get("http://" + CAM_IP + "/index.htm")
-    print(r.status_code)
+# def cam_login():
+#     r = requests.get("http://" + CAM_IP + "/index.htm", auth=HTTPDigestAuth(CAM_USERNAME, CAM_PASSWD))
+# cam_login()
 
-    # Check for authentication
-    if r.status_code == 401:
-        wwwHeader = r.headers['WWW-Authenticate']
-        wwwDict = digestHeader2Dict(wwwHeader)
-        newHeaders = {
-            'Authorization': digestGetAuthHeader(wwwDict['nonce'])
-            # 'Authorization': digestGetAuthHeader('7576831e705c8679182cf38569507df6')
-        }
-        print(newHeaders)
-        nr = requests.get("http://" + CAM_IP + "/index.htm", newHeaders)
-        print(nr.status_code, nr.content)
-    pass
-
-cam_login()
+def moveCam(direction, amount):
+    print("moving:", direction, amount)
+    r = requests.get("http://" + CAM_IP + f'/cgi-bin/longcctvmove.cgi?action=move&direction={direction}&panstep={amount}&tiltstep={amount}', auth=HTTPDigestAuth(CAM_USERNAME, CAM_PASSWD))
+    print(r.status_code, r.content)
 
 def status():
     return json.dumps({"error": lasterror})
@@ -103,17 +94,18 @@ def handler(msg):
             return status()
 
         try:
-            if cmd == "left":
-                print("left")
+            # if cmd == "left":
+            #     print("left")
 
-            elif cmd == "right":
-                print("right")
+            # elif cmd == "right":
+            #     print("right")
 
-            elif cmd == "up":
-                print("up")
+            # elif cmd == "up":
+            #     print("up")
 
-            elif cmd == "down":
-                print("down")
+            # elif cmd == "down":
+            #     print("down")
+            moveCam(cmd, arg)
         except Exception as e:
             lasterror = str(e)
             print("failed to run command: {}".format(e))
