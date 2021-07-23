@@ -11,7 +11,11 @@ import requests
 from requests.auth import HTTPDigestAuth
 
 if len(sys.argv) < 6:
-    print("Usage: {} <HOST> <PORT> <KEY> <CAMERA_IP> <CAMERA_USER> <CAMERA_PASSWORD>".format(sys.argv[0]))
+    print(
+        "Usage: {} <HOST> <PORT> <KEY> <CAMERA_IP> <CAMERA_USER> <CAMERA_PASSWORD>".format(
+            sys.argv[0]
+        )
+    )
     exit(1)
 
 HOST = sys.argv[1]
@@ -30,13 +34,16 @@ f = cryptography.fernet.Fernet(KEY)
 global lasterror
 lasterror = ""
 
+
 def moveCam(direction, amount):
     print("moving:", direction, amount)
-    r = requests.get("http://" + CAM_IP + f'/cgi-bin/longcctvmove.cgi?action=move&direction={direction}&panstep={amount}&tiltstep={amount}', auth=HTTPDigestAuth(CAM_USERNAME, CAM_PASSWD))
+    r = requests.get(
+        "http://"
+        + CAM_IP
+        + f"/cgi-bin/longcctvmove.cgi?action=move&direction={direction}&panstep={amount}&tiltstep={amount}",
+        auth=HTTPDigestAuth(CAM_USERNAME, CAM_PASSWD),
+    )
     print(r.status_code, r.content)
-
-#def status():
-#    return json.dumps({"error": lasterror})
 
 
 def handler(msg):
@@ -48,12 +55,8 @@ def handler(msg):
     except Exception as e:
         print("failed to decrypt message")
         lasterror = str(e)
-        return status()
 
     print("decrypted message: {}".format(msg))
-
-#    if msg == "status":
-#        return status()
 
     if len(msg.split()) == 2:
         cmd = msg.split()[0].strip()
@@ -64,26 +67,14 @@ def handler(msg):
         except Exception as e:
             print("failed to decode argument: {}".format(e))
             lasterror = str(e)
-            # return status()
 
         try:
-            # if cmd == "left":
-            #     print("left")
-
-            # elif cmd == "right":
-            #     print("right")
-
-            # elif cmd == "up":
-            #     print("up")
-
-            # elif cmd == "down":
-            #     print("down")
             moveCam(cmd, arg)
         except Exception as e:
             lasterror = str(e)
             print("failed to run command: {}".format(e))
 
-        return #status()
+        return
 
     else:
         return f.encrypt(
@@ -98,5 +89,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         d, a = s.recvfrom(1024)
         data.append(d)
         msg = handler(b"".join(data))
-        s.sendto(f.encrypt("ok".encode("ascii")), a)
+        # need reply so client gets confirmation
+        # empty string used for convenience
+        s.sendto(f.encrypt("".encode("ascii")), a)
         data.clear()
