@@ -8,7 +8,7 @@
 #    q for quit
 # A numeric value followed by a direction (regardless of upper or lower case)
 # will move the number of degrees specified by the numeric value in the given
-# direction. Entering 'c' (for status) will clear any numbers already entered.
+# direction.
 #
 # Examples
 # given:
@@ -18,7 +18,6 @@
 # W moves up 20 degrees
 # 56w moves up 56 degrees
 # 56W moves up 56 degrees (not 20)
-# 56cw moves up 5 degrees
 
 
 import cryptography
@@ -62,7 +61,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
     s.bind(s.getsockname())  # bidirectional socket
     s.settimeout(1)  # timeout for response, 1 second
     nums = ""
-    print("wasd/WASD, c for status, q to quit")
+    print("wasd/WASD, q to quit")
     while True:
         char = sys.stdin.read(1)
 
@@ -80,10 +79,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         elif char in "dD":
             msg = "right"
 
-        # c, q, nums,error
-
-        elif char == "c":
-            msg = "status"
+        # q, nums, error
 
         elif char == "q":
             print()
@@ -93,7 +89,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             continue
         else:
             print()
-            print("give me: {w,a,s,d,W,A,S,D,c,q,[0-9]}")
+            print("give me: {w,a,s,d,W,A,S,D,q,[0-9]}")
             continue
 
         if char in "wasdWASD":
@@ -110,9 +106,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         msg = f.encrypt(msg.encode("ascii"))
         s.sendto(msg, (HOST, PORT))
 
-        d = None
         try:
             d, a = s.recvfrom(1024)
-            print("\t%s", f.decrypt(d).decode("ascii").strip())
         except socket.timeout:
             print("\tgot no reply before timeout")
