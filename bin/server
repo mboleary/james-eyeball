@@ -89,5 +89,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         d, a = s.recvfrom(1024)
         data.append(d)
         msg = handler(b"".join(data))
+        # need reply so client gets confirmation
+        # empty string used for convenience
         s.sendto(f.encrypt("".encode("ascii")), a)
         data.clear()
