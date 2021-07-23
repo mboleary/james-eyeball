@@ -64,7 +64,7 @@ def handler(msg):
         except Exception as e:
             print("failed to decode argument: {}".format(e))
             lasterror = str(e)
-            return status()
+            # return status()
 
         try:
             # if cmd == "left":
@@ -98,5 +98,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         d, a = s.recvfrom(1024)
         data.append(d)
         msg = handler(b"".join(data))
-        s.sendto(f.encrypt(msg.encode("ascii")), a)
+        s.sendto(f.encrypt("ok".encode("ascii")), a)
         data.clear()
