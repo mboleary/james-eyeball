@@ -97,6 +97,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
     while True:
         d, a = s.recvfrom(1024)
         data.append(d)
-#        msg = handler(b"".join(data))
-#        s.sendto(f.encrypt(msg.encode("ascii")), a)
+        msg = handler(b"".join(data))
+        s.sendto(f.encrypt(msg.encode("ascii")), a)
         data.clear()
