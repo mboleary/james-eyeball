@@ -5,7 +5,7 @@ James's Eyeball
 
 ### Client
 
-Usage notes for the client are at the top of the bin/client file. Invoke by
+Usage notes for the client are at the top of the `bin/client` file. Invoke by
 running `./start_client.sh`. You will need to have had the `.env` file shared with
 you via another channel.
 
