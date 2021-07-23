@@ -28,8 +28,8 @@ import termios
 
 # small and large movement increments, can be changed here by user
 
-S_VAL = 5
-L_VAL = 20
+S_VAL = 3
+L_VAL = 10
 
 if len(sys.argv) != 4:
     print("Usage: {} <HOST> <PORT> <KEY>".format(sys.argv[0]))

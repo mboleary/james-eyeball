@@ -55,7 +55,7 @@ def handler(msg):
 #    if msg == "status":
 #        return status()
 
-    elif len(msg.split()) == 2:
+    if len(msg.split()) == 2:
         cmd = msg.split()[0].strip()
         arg = msg.split()[1].strip()
         print("cmd='{}', arg='{}'".format(cmd, arg))
