@@ -6,12 +6,12 @@ James's Eyeball
 ### Client
 
 Usage notes for the client are at the top of the bin/client file. Invoke by
-running `./start_client`. You will need to have had the `.env` file shared with
+running `./start_client.sh`. You will need to have had the `.env` file shared with
 you via another channel.
 
 ### Server
 
-Invoke with `./start_server` The `.env` file will need to be shared
+Invoke with `./start_server.sh` The `.env` file will need to be shared
 between server operators and users via another channel.
 
 ## Video Scripts
